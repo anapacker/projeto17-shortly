@@ -1,4 +1,4 @@
-import { userSchema } from "../schemas/userSchema.js"
+import { userSchema } from "../schemas/user.schema.js"
 
 export function userSchemaValidation(req, res, next) {
     const validationUser = userSchema.validate(req.body, { abortEarly: false })
