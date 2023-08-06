@@ -26,7 +26,7 @@ export async function signin(req, res) {
     try {
         const login = await db.query(`SELECT * FROM users WHERE email=$1`, [email])
         if (!login.rowCount) return res.status(404).send("Você não tem cadastro.")
-        if (!bcrypt.compareSync(password, login.rows[0].password)) return res.sendStatus(401)
+        if (!bcrypt.compareSync(password, login.rows[0].password)) return res.status(401).send("Senha incorreta.")
         const token = v4();
 
         const insertSessionLogin = await db.query(`
