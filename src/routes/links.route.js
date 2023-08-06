@@ -1,6 +1,7 @@
 import { Router } from "express"
+import { openShortUrl } from "../controllers/links.controller.js"
 
-const linkSchema = Router()
-linkSchema.post("/urls/shorten")
-
-export default userRouter
+const linkRoute = Router()
+linkRoute.post("/urls/shorten")
+linkRoute.get("/urls/open/:shortUrl", openShortUrl)
+export default linkRoute
