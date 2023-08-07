@@ -48,7 +48,7 @@ export async function openShortUrl(req, res) {
 
         const originalLink = link.rows[0].url
 
-        await db.query(`UPDATE "shortedUrls" SET "visitorsCount" + 1 WHERE "shortUrl"=$1`, [shortUrl])
+        await db.query(`UPDATE "shortedUrls" SET "visitorsCount" = "visitorsCount" + 1 WHERE "shortUrl"=$1`, [shortUrl])
         res.redirect(originalLink)
     } catch (err) {
         res.status(500).send(err.message)
