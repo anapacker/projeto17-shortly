@@ -41,9 +41,15 @@ export async function getUrlId(req, res) {
 }
 
 export async function openShortUrl(req, res) {
+    const { shortUrl } = req.params
     try {
+        const link = await db.query(`SELECT url FROM "shortedUrls" WHERE "shortUrl"=$1`, [shortUrl])
+        if (link.rowCount === 0) return res.status(404).send("Shortly não encontrado.")
 
-        res.redirect("https://google.com.br")
+        const originalLink = link.rows[0].url
+
+        await db.query(`UPDATE "shortedUrls" SET "visitorsCount" + 1 WHERE "shortUrl"=$1`, [shortUrl])
+        res.redirect(originalLink)
     } catch (err) {
         res.status(500).send(err.message)
     }
