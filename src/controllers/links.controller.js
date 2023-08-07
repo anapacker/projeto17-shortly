@@ -34,7 +34,7 @@ export async function getUrlId(req, res) {
         SELECT id, "shortUrl", "url" FROM "shortedUrls" WHERE id=$1;`, [id])
         if (!getshortUrl.rowCount) return res.sendStatus(404)
 
-        return res.send(getshortUrl.rows[0])
+        return res.status(200).send(getshortUrl.rows[0])
     } catch (err) {
         res.status(500).send(err.message)
     }
