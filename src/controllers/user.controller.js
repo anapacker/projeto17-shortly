@@ -44,3 +44,13 @@ export async function signin(req, res) {
         return res.status(500).send(err.message)
     }
 }
+
+export async function getUsers(req, res) {
+
+    try {
+
+    } catch (err) {
+        return res.status(500).send(err.message)
+
+    }
+}
