@@ -44,7 +44,7 @@ export async function openShortUrl(req, res) {
     const { shortUrl } = req.params
     try {
         const link = await db.query(`SELECT url FROM "shortedUrls" WHERE "shortUrl"=$1`, [shortUrl])
-        if (link.rowCount === 0) return res.status(404).send("Shortly não encontrado.")
+        if (!link.rowCount) return res.status(404).send("Shortly não encontrado.")
 
         const originalLink = link.rows[0].url
 
