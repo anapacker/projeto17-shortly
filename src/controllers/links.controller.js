@@ -56,8 +56,17 @@ export async function openShortUrl(req, res) {
 }
 
 export async function deleteUrl(req, res) {
-    try {
+    const { id } = req.params
+    const userId = req.headers.id
 
+    try {
+        const urlUserId = await db.query(`SELECT * FROM "shortedUrls" WHERE id=$1`, [id])
+        if (!urlUserId.rowCount) return res.sendStatus(404)
+
+        if (urlUserId.rows[0].id !== userId) return res.sendStatus(401)
+
+        await db.query(`DELETE FROM "shortedUrls" WHERE id=$1`, [id])
+        res.status(204).send(`Shortly excluído com sucesso!`)
     } catch (err) {
         res.status(500).send(err.message)
     }
