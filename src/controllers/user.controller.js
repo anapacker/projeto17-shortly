@@ -45,9 +45,23 @@ export async function signin(req, res) {
     }
 }
 
-export async function getUsers(req, res) {
+export async function getUser(req, res) {
+    const { userId } = res.locals
+    let somaVisits = 0
 
     try {
+        const user = await db.query(`SELECT * FROM users WHERE id=$1`, [userId])
+
+        const shortenedUrls = await db.query(`
+        SELECT id, url, "shortUrl", "visitorsCount" AS "visitCount" FROM "shortedUrls" WHERE "userId"=$1
+        `, [userId])
+
+        shortenedUrls.rows.forEach(shortUrl => {
+            somaVisits = somaVisits + shortUrl.visitCount
+        })
+
+        const objtUser = { id: user.rows[0].id, name: user.rows[0].name, visitCount: somaVisits, shortenedUrls: shortenedUrls.rows }
+        res.send(objtUser)
 
     } catch (err) {
         return res.status(500).send(err.message)
